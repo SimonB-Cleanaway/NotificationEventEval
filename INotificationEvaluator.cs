@@ -3,11 +3,24 @@ using System.Threading.Tasks;
 
 namespace SampleApp
 {
+    public enum NotificationLevel
+    {
+        Information,
+        Warning,
+        Error,
+        Critical
+    }
+
+    public interface INotificationResult
+    {
+        NotificationLevel Level { get; }
+        string Message { get; }
+    }
+
+
     public interface INotificationEvaluator
     {
         NotificationType[] SupportNotificationTypes { get; }
-        
-        Task<bool> Evaluate(INotificationRule rule, IStreamEvent streamEvent);
-
+        Task<INotificationResult> Evaluate(INotificationRule rule, IStreamEvent streamEvent);
     }
 }

@@ -1,8 +1,6 @@
 ﻿using Serilog;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SampleApp
@@ -43,12 +41,13 @@ namespace SampleApp
 
                     foreach (var rule in supportedRules)
                     {
-                        if (await eval.Evaluate(rule, streamEvent))
+                        var result = await eval.Evaluate(rule, streamEvent);
+
+                        if (result != null)
                         {
-                            _logger.Information("Yeah");
+                            _logger.Information($"{result.Level} - {result.Message}");
                         }
                     }
-
                 }
             }
         }

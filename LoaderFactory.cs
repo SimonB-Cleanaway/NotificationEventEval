@@ -21,11 +21,12 @@ namespace SampleApp
 
     public static class LoaderFactory
     {
-        private static JsonSerializerOptions _jsonSerializerOptions = new() { Converters = { new JsonStringEnumConverter() } };
+        private static JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } };
 
-        public static INotificationRule[] LoadNotificationRulesFromFile(string fileName) => LoadNotificationRulesFromJson(File.ReadAllText(fileName));
-        public static INotificationRule[] LoadNotificationRulesFromJson(string jsonString) => JsonSerializer.Deserialize<NotificationRule[]>(jsonString, _jsonSerializerOptions);
-        public static IStreamEvent LoadStreamEventFromFile(string fileName) => LoadStreamEventFromJson(File.ReadAllText(fileName));
-        public static IStreamEvent LoadStreamEventFromJson(string jsonString) => JsonSerializer.Deserialize<StreamEvent>(jsonString, _jsonSerializerOptions);
+        public static T LoadFromFile<T>(string fileName) => LoadFromJson<T>(File.ReadAllText(fileName));
+        public static T LoadFromJson<T>(string jsonString) => JsonSerializer.Deserialize<T>(jsonString, _jsonSerializerOptions);
+
+        public static INotificationRule[] LoadNotificationRulesFromFile(string fileName) => LoadFromJson<NotificationRule[]>(File.ReadAllText(fileName));
+        public static IStreamEvent LoadStreamEventFromFile(string fileName) => LoadFromJson<StreamEvent>(File.ReadAllText(fileName));
     }
 }

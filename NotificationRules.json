@@ -1,10 +1,13 @@
 [
   {
     "NotificationType": "VehicleRegistraion",
-    "Details": "SomeDetail"
+    "Details": "{ \"CheckIntervalDays\": 30, \"Level\": \"Warning\", \"Message\": \"Vehicle Rego Expiring Soon.\" }"
   },
   {
     "NotificationType": "OutOfArea",
     "Details": "SomeDetail"
   }
 ]
+
+
+          

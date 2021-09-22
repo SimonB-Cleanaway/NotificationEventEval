@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SampleApp
@@ -10,9 +7,9 @@ namespace SampleApp
     {
         public NotificationType[] SupportNotificationTypes => new[] { NotificationType.OutOfArea };
 
-        public Task<bool> Evaluate(INotificationRule rule, IStreamEvent streamEvent)
+        Task<INotificationResult> INotificationEvaluator.Evaluate(INotificationRule rule, IStreamEvent streamEvent)
         {
-            return Task.FromResult(false);
+            return Task.FromResult<INotificationResult>(null);
         }
     }
 }

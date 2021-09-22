@@ -12,7 +12,6 @@ namespace SampleApp
         OutOfArea
     }
 
-
     public interface INotificationRule
     {
         NotificationType NotificationType { get; }
