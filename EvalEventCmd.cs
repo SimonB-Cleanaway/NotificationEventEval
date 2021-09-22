@@ -26,28 +26,30 @@ namespace SampleApp
                 return;
             }
 
+            // Load Rules into a dictionary of based on rule type.
             var rules = LoaderFactory.LoadNotificationRulesFromFile(args.First())
                 .GroupBy(x => x.NotificationType)
                 .ToDictionary(x => x.Key, x => x.ToArray());
 
+            // Get list of rules and the matching evaluators based on rule type and evaluator supported types
+            var ruleEvals = _notificationEvals
+                .SelectMany(x => x.SupportNotificationTypes.Select(nt => (eval: x, notificationType: nt)))
+                .Select(x => rules.TryGetValue(x.notificationType, out var supportedRules) ? (x.eval, supportedRules) : (x.eval, null))
+                .Where(x => x.supportedRules != null)
+                .SelectMany(x => x.supportedRules.Select(y => (rule: y, x.eval)))
+                .ToList();
+
+            // Go through all the stream events
             foreach (var sef in args.Skip(1))
             {
                 var streamEvent = LoaderFactory.LoadStreamEventFromFile(sef);
 
-                foreach(var (eval, et) in _notificationEvals.SelectMany(x => x.SupportNotificationTypes.Select(t => (x, t))))
+                var tasks = ruleEvals.Select(x => x.eval.Evaluate(x.rule, streamEvent));
+                var results = await Task.WhenAll(tasks);
+
+                foreach(var result in results.Where(x => x != null))
                 {
-                    if (!rules.TryGetValue(et, out var supportedRules))
-                        continue;
-
-                    foreach (var rule in supportedRules)
-                    {
-                        var result = await eval.Evaluate(rule, streamEvent);
-
-                        if (result != null)
-                        {
-                            _logger.Information($"{result.Level} - {result.Message}");
-                        }
-                    }
+                    _logger.Information($"{result.Level} - {result.Message}");
                 }
             }
         }
