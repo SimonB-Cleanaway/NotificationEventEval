@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "SampleApp": {
+      "commandName": "Project",
+      "commandLineArgs": "EvalEvent NotificationRules.json se1.json",
+      "workingDirectory": "C:\\Users\\sbateman\\Projects\\tmp\\SampleApp"
+    }
+  }
+}

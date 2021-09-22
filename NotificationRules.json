@@ -1,0 +1,10 @@
+[
+  {
+    "NotificationType": "VehicleRegistraion",
+    "Details": "SomeDetail"
+  },
+  {
+    "NotificationType": "OutOfArea",
+    "Details": "SomeDetail"
+  }
+]
